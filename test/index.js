@@ -34,7 +34,7 @@ test('single target', function (t) {
   document.body.removeChild(ul)
 })
 
-test('multiple targets', function(t) {
+test('multiple targets passed with NodeList', function(t) {
   t.plan(4)
 
   var ul1 = prepare()
@@ -50,6 +50,26 @@ test('multiple targets', function(t) {
 
   document.body.removeChild(ul1)
   document.body.removeChild(ul2)
+})
+
+test('multiple targets passed with HTMLCollection', function(t) {
+    t.plan(4)
+
+    var ul1 = prepare()
+        , ul2 = prepare()
+    ul1.setAttribute('class', 'foo')
+    ul2.setAttribute('class', 'foo')
+    document.body.appendChild(ul1)
+    document.body.appendChild(ul2)
+
+    var observer = new SelectorObserver(document.getElementsByClassName('foo'), 'a', function() {
+        t.equal(this.innerHTML, 'existing')
+    })
+
+    observer.observe()
+
+    document.body.removeChild(ul1)
+    document.body.removeChild(ul2)
 })
 
 test('added callback', function(t) {
